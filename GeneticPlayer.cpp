@@ -156,7 +156,7 @@ std::vector<std::vector<std::vector<std::vector<float>>>> GeneticPlayer::Reprodu
 		int randomNumber1 = rand() % int(newPopulation.size());
 		int randomNumber2 = rand() % int(newPopulation.size());
 		newPopulation.push_back(CrossOver(newPopulation[randomNumber1], newPopulation[randomNumber2]));
-		newPopulation.push_back(GenerateBrain(static_cast<int>(m_InputSize), static_cast<int>(m_HiddenSize), 4));
+		//newPopulation.push_back(GenerateBrain(static_cast<int>(m_InputSize), static_cast<int>(m_HiddenSize), 4));
 	}
 	for (std::vector<std::vector<std::vector<float>>>& brain : newPopulation)
 	{

@@ -39,6 +39,7 @@ private:
 	static bool m_NextGen;
 	static bool m_NextInd;
 	std::vector<float> m_Fitnessess;
+	static bool m_Pause;
 
 	// FUNCTIONS
 	void Initialize( );

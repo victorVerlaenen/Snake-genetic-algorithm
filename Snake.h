@@ -36,12 +36,13 @@ public:
 	void IncreaseAvgSteps();
 	void IncreaseSpeed() { m_MovingSpeed *= 2; }
 	void DecreaseSpeed() { m_MovingSpeed *= 2; }
+	void IncreaseFoodEaten() { m_FoodEaten++; }
 private:
 	bool CheckIfHitsBorder();
 	bool CheckIfHitsSelf();
 	bool CheckIfEatenNothing();
 	int m_Size{ 3 };
-	float timePassed{ 0 };
+	float m_TimePassed{ 0 };
 	Point2f m_MovingVelocity;
 	MovingDirection m_MovingDirection;
 	const float m_SegmentSize;
@@ -50,7 +51,7 @@ private:
 	bool m_SnakeAdvanced{ false };
 	const Rectf m_WorldBounds;
 	int m_CurrentLife{ 1 };
-	int m_MaxSteps{ 200 };
+	int m_MaxSteps{ 1000 };
 	int m_AmountOfSteps{ 0 };
 	int m_AmountOfStepsForPenalty{ 0 };
 	int m_LastCheckedScore{ 0 };
@@ -58,4 +59,5 @@ private:
 	int m_Penalties{ 0 };
 	int m_AvgSteps{ 0 };
 	float m_MovingSpeed{ 0.2f };
+	int m_FoodEaten{ 0 };
 };

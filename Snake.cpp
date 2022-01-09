@@ -42,8 +42,8 @@ void Snake::Update(float elapsedTime, Food* food)
 		break;
 	}
 
-	timePassed += elapsedTime;
-	if (timePassed >= 0.001)
+	m_TimePassed += elapsedTime;
+	if (m_TimePassed >= 0.001)
 	{
 		Rectf newSegment{ m_Segments[0].left + m_MovingVelocity.x, m_Segments[0].bottom + m_MovingVelocity.y, m_SegmentSize, m_SegmentSize };
 		for (size_t i{ m_Segments.size() - 1 }; i > 0; --i)
@@ -51,7 +51,7 @@ void Snake::Update(float elapsedTime, Food* food)
 			m_Segments[i] = m_Segments[i - 1];
 		}
 		m_Segments[0] = newSegment;
-		timePassed = 0;
+		m_TimePassed = 0;
 		m_SnakeAdvanced = true;
 		m_AmountOfSteps++;
 		m_AmountOfStepsForPenalty++;
@@ -66,11 +66,14 @@ void Snake::Update(float elapsedTime, Food* food)
 	if (m_AmountOfSteps > m_MaxSteps)
 	{
 		//cout << "AvgSteps: " << m_AvgSteps << endl;
-		m_Fitness = World::GetMaxScore() * 5000 - m_CurrentLife * 150 - m_Penalties * 1000 - (m_AvgSteps / m_CurrentLife) * 100;
+		cout << "Foods eaten: " << m_FoodEaten << "\t amount of deaths: " << m_CurrentLife << "\t avg_steps: " << (m_AvgSteps / m_CurrentLife) << endl;
+		m_Fitness = m_FoodEaten * 5000.f - m_CurrentLife * 150 - m_Penalties * 1000 - (m_AvgSteps / m_CurrentLife) * 100;
 		m_Penalties = 0;
 		m_AmountOfSteps = 0;
+
 		m_CurrentLife = 1;
 		m_AvgSteps = 0;
+		m_FoodEaten = 0;
 		Game::GameOver();
 	}
 }
@@ -131,10 +134,10 @@ bool Snake::CheckIfEatenNothing()
 {
 	if (m_AmountOfStepsForPenalty >= 200)
 	{
+		m_AmountOfStepsForPenalty = 0;
 		if (m_LastCheckedScore == World::GetScore())
 		{
 			m_Penalties++;
-			m_AmountOfStepsForPenalty = 0;
 			return true;
 		}
 		m_LastCheckedScore = int(World::GetScore());
@@ -252,22 +255,22 @@ std::vector<float> Snake::GetInput(const Rectf& food)
 
 
 
-	/*if (m_MovingDirection == MovingDirection::left)
+	if (m_MovingDirection == MovingDirection::left)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(0);
+		inputVec.push_back(-1);
 	if (m_MovingDirection == MovingDirection::right)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(0);
+		inputVec.push_back(-1);
 	if (m_MovingDirection == MovingDirection::up)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(0);
+		inputVec.push_back(-1);
 	if (m_MovingDirection == MovingDirection::down)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(0);*/
+		inputVec.push_back(-1);
 
 	
 

@@ -12,6 +12,7 @@ int Game::m_Generation{ 0 };
 int Game::m_Individual{ 0 };
 bool Game::m_NextGen{ false };
 bool Game::m_NextInd{ false };
+bool Game::m_Pause{ true };
 
 void Game::GameOver()
 {
@@ -22,6 +23,11 @@ void Game::GameOver()
 		m_Individual = 0;
 		m_Generation++;
 		m_NextGen = true;
+		if (m_Generation == 50 && m_Pause)
+		{
+			system("pause");
+			m_Pause = false;
+		}
 		if (m_Generation >= 100)
 		{
 			cout << "COMPLETE";
@@ -46,7 +52,7 @@ void Game::Initialize()
 	m_pWorld = std::make_unique<World>(Rectf{ 50.f, 50.f, 400.f, 400.f }, 16);//gives a border of 50 for the window
 	m_pSnake = std::make_unique<Snake>(m_pWorld->GetWorldBounds(), m_pWorld->GetWorldBounds().width / m_pWorld->GetNrOfColsAndRows());
 	m_pFood = std::make_unique<Food>(m_pWorld->GetWorldBounds(), m_pWorld->GetNrOfColsAndRows(), m_pSnake->GetSegments());
-	m_pPlayer = std::make_unique<GeneticPlayer>(100, 100, 1, 5.f, 15, 10.f);
+	m_pPlayer = std::make_unique<GeneticPlayer>(100, 100, 1, 9.f, 15, 10.f);
 	cout << "generation: " << m_Generation << ", individual: " << m_Individual << endl;
 }
 
@@ -76,6 +82,7 @@ void Game::Update(float elapsedSec)
 	if (m_pFood->CheckIfHit(m_pSnake->GetSegments()))
 	{
 		m_pSnake->GrowSnake();
+		m_pSnake->IncreaseFoodEaten();
 		m_pSnake->IncreaseAvgSteps();
 		m_pWorld->IncreaseScore();
 	}
