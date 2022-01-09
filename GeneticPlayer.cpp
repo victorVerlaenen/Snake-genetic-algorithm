@@ -94,7 +94,7 @@ std::vector<float> GeneticPlayer::Dot(const std::vector<std::vector<float>>& lhs
 	return result;
 }
 
-int GeneticPlayer::GetMove(std::vector<float> inputVector)
+int GeneticPlayer::GetMove(const std::vector<float>& inputVector)
 {
 	std::vector<std::vector<float>> hiddenLayer1{ m_CurrentBrain[0] };
 	std::vector<std::vector<float>> hiddenLayer2{ m_CurrentBrain[1] };

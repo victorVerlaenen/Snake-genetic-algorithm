@@ -12,7 +12,7 @@ public:
 	GeneticPlayer(int populationSize, int numOfGenerations, int numOfTrials, float inputSize, int hiddenSize, float boardSize, float mutationChance = 0.1f, float mutationSize = 0.1f);
 	void SetIndividual(int individual);
 	void NextGeneration(const std::vector<float>& fitnesses);
-	int GetMove(std::vector<float> inputVector);
+	int GetMove(const std::vector<float>& inputVector);
 	std::vector<std::vector<std::vector<std::vector<float>>>> Reproduce(const std::vector<std::vector<std::vector<std::vector<float>>>>& top2Brains);
 private:
 	void Initialize();
