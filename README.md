@@ -8,6 +8,7 @@ The aim of this project is to learn an ai to play snake using genetic algorithms
 
 # Network structure:
   8 inputs: 
+  
     Is there danger to the left of the head?	(0 no -1 yes)
     Is there danger to the right of the head?	(0 no -1 yes)
     Is there danger to the top of the head?	(0 no -1 yes)
@@ -15,6 +16,7 @@ The aim of this project is to learn an ai to play snake using genetic algorithms
     Is there food to the left of the head? 		(0 no 1 yes)
     A value of sinus of the angle on which the food is inclined relative to the snake (between -1 and 1)
   4 outputs:
+  
     Turn left.
     Turn right.
     Turn upwards.
