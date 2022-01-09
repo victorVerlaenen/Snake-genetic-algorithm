@@ -35,5 +35,4 @@ Crossover:
   Randomly select 2 snakes from the top 10 to crossover till the population size of 50 is achieved again.
   Take a random number between 0 and 1. If the number is smaller than 0.5 we take the weight of the father and otherwise we take the weight of the mother.
 
-
 THIS IS ALL UNDER PROGRESS SO CHANGES ARE GOING TO HAPPEN
