@@ -34,7 +34,7 @@ void Game::GameOver()
 			system("pause");
 		}
 	}
-	cout << "generation: " << m_Generation << ", individual: " << m_Individual << endl;
+	cout << endl << "======================================" << endl << "generation: " << m_Generation << ", individual: " << m_Individual << endl;
 }
 Game::Game(const Window& window)
 	:m_Window{ window }
@@ -54,6 +54,8 @@ void Game::Initialize()
 	m_pFood = std::make_unique<Food>(m_pWorld->GetWorldBounds(), m_pWorld->GetNrOfColsAndRows(), m_pSnake->GetSegments());
 	m_pPlayer = std::make_unique<GeneticPlayer>(100, 100, 1, 9.f, 15, 10.f);
 	cout << "generation: " << m_Generation << ", individual: " << m_Individual << endl;
+
+	
 }
 
 void Game::Cleanup()
@@ -64,6 +66,7 @@ void Game::Update(float elapsedSec)
 {
 	if (m_NextInd)
 	{
+		m_TempLife = 1;
 		m_Fitnessess.push_back(m_pSnake->GetFitness());
 		//cout << m_pSnake->GetFitness() << endl;
 		m_pPlayer->SetIndividual(m_Individual);
@@ -81,9 +84,10 @@ void Game::Update(float elapsedSec)
 	m_pSnake->Update(elapsedSec, m_pFood.get());
 	if (m_pFood->CheckIfHit(m_pSnake->GetSegments()))
 	{
+		m_pSnake->IncreaseAvgSteps();
 		m_pSnake->GrowSnake();
 		m_pSnake->IncreaseFoodEaten();
-		m_pSnake->IncreaseAvgSteps();
+		m_TempLife = m_pSnake->GetLife();
 		m_pWorld->IncreaseScore();
 	}
 }

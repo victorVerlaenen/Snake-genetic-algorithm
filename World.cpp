@@ -20,7 +20,7 @@ void World::IncreaseScore()
 	if (m_Score > m_MaxScore)
 	{
 		m_MaxScore = m_Score;
-		cout << "Max Score: " << m_MaxScore << endl;
+		//cout << "Max Score: " << m_MaxScore << endl;
 	}
 }
 

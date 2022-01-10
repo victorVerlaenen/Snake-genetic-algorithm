@@ -43,7 +43,7 @@ void Snake::Update(float elapsedTime, Food* food)
 	}
 
 	m_TimePassed += elapsedTime;
-	if (m_TimePassed >= 0.001)
+	if (m_TimePassed >= m_MovingSpeed)
 	{
 		Rectf newSegment{ m_Segments[0].left + m_MovingVelocity.x, m_Segments[0].bottom + m_MovingVelocity.y, m_SegmentSize, m_SegmentSize };
 		for (size_t i{ m_Segments.size() - 1 }; i > 0; --i)
@@ -66,8 +66,9 @@ void Snake::Update(float elapsedTime, Food* food)
 	if (m_AmountOfSteps > m_MaxSteps)
 	{
 		//cout << "AvgSteps: " << m_AvgSteps << endl;
-		cout << "Foods eaten: " << m_FoodEaten << "\t amount of deaths: " << m_CurrentLife << "\t avg_steps: " << (m_AvgSteps / m_CurrentLife) << endl;
-		m_Fitness = m_FoodEaten * 5000.f - m_CurrentLife * 150 - m_Penalties * 1000 - (m_AvgSteps / m_CurrentLife) * 100;
+		cout << "Max Score: " << World::GetMaxScore() << endl;
+		cout << "Foods eaten: " << m_FoodEaten << "\t amount of deaths: " << m_CurrentLife << "\t avg_steps: " << ((m_FoodEaten == 0) ? m_AvgSteps : (float(m_AvgSteps) / (m_FoodEaten))) << endl;
+		m_Fitness = m_FoodEaten * 5000.f - m_CurrentLife * 150 - m_Penalties * 1000 - ((m_FoodEaten == 0) ? m_AvgSteps : (float(m_AvgSteps) / (m_FoodEaten))) * 100;
 		m_Penalties = 0;
 		m_AmountOfSteps = 0;
 
@@ -80,7 +81,7 @@ void Snake::Update(float elapsedTime, Food* food)
 
 void Snake::IncreaseAvgSteps()
 {
-	m_AvgSteps += m_AmountOfSteps;
+	m_AvgSteps += m_AmountOfStepsForPenalty;
 	//cout << "AvgSteps: " << m_AvgSteps << endl;
 }
 
@@ -152,7 +153,17 @@ void Snake::ResetSnake()
 	m_Segments.push_back(Rectf{ (m_WorldBounds.left + m_SegmentSize) + (m_WorldBounds.width / 2.f), m_WorldBounds.bottom + (m_WorldBounds.height / 2.f), m_SegmentSize, m_SegmentSize });
 	m_Segments.push_back(Rectf{ (m_WorldBounds.left + m_SegmentSize * 2) + (m_WorldBounds.width / 2.f), m_WorldBounds.bottom + (m_WorldBounds.height / 2.f), m_SegmentSize, m_SegmentSize });
 
-	m_MovingDirection = MovingDirection::left;
+	int randNmbr{ rand() % 4 };
+	switch (randNmbr)
+	{
+	case 0: m_MovingDirection = MovingDirection::left; break;
+	case 1: m_MovingDirection = MovingDirection::down; break;
+	case 2: m_MovingDirection = MovingDirection::up; break;
+	default:
+		break;
+	}
+
+	//m_MovingDirection = MovingDirection::left;
 	m_CurrentLife++;
 	m_AmountOfStepsForPenalty = 0;
 	//IncreaseAvgSteps();
@@ -176,53 +187,53 @@ std::vector<float> Snake::GetInput(const Rectf& food)
 	std::vector<float> inputVec;
 	//wall left
 	if (m_Segments[0].left - m_SegmentSize < m_WorldBounds.left)
-		inputVec.push_back(-1);
-	else
 		inputVec.push_back(0);
+	else
+		inputVec.push_back(1);
 
 	//wall right
 	if ((m_Segments[0].left + m_SegmentSize * 2) > (m_WorldBounds.left + m_WorldBounds.width))
-		inputVec.push_back(-1);
-	else
 		inputVec.push_back(0);
+	else
+		inputVec.push_back(1);
 
 	//wall up
-	if (m_Segments[0].bottom + m_SegmentSize < m_WorldBounds.bottom)
-		inputVec.push_back(-1);
-	else
+	if (m_Segments[0].bottom - m_SegmentSize < m_WorldBounds.bottom)
 		inputVec.push_back(0);
+	else
+		inputVec.push_back(1);
 
 	//wall down
-	if ((m_Segments[0].bottom - m_SegmentSize * 2) > (m_WorldBounds.bottom + m_WorldBounds.height))
-		inputVec.push_back(-1);
-	else
+	if ((m_Segments[0].bottom + m_SegmentSize * 2) > (m_WorldBounds.bottom + m_WorldBounds.height))
 		inputVec.push_back(0);
+	else
+		inputVec.push_back(1);
 
 	//segments
 	for (size_t i{ 1 }; i < m_Segments.size(); ++i)
 	{
 		//left
-		if (utils::IsOverlapping(Rectf{ m_Segments[0].left - m_SegmentSize + 1, m_Segments[0].bottom + 1, m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
+		if (utils::IsOverlapping(Rectf{ m_Segments[0].left - (m_SegmentSize + 1), m_Segments[0].bottom + 1, m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
 		{
-			inputVec[0] = -1;
+			inputVec[0] = 0;
 			continue;
 		}
 		//right
-		if (utils::IsOverlapping(Rectf{ m_Segments[0].left + m_SegmentSize + 1, m_Segments[0].bottom + 1, m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
+		if (utils::IsOverlapping(Rectf{ m_Segments[0].left + (m_SegmentSize + 1) + m_SegmentSize, m_Segments[0].bottom + 1, m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
 		{
-			inputVec[1] = -1;
+			inputVec[1] = 0;
 			continue;
 		}
 		//up
-		if (utils::IsOverlapping(Rectf{ m_Segments[0].left + 1, m_Segments[0].bottom + m_SegmentSize + 1, m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
+		if (utils::IsOverlapping(Rectf{ m_Segments[0].left + 1, m_Segments[0].bottom + (m_SegmentSize + 1) + m_SegmentSize , m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
 		{
-			inputVec[2] = -1;
+			inputVec[2] = 0;
 			continue;
 		}
 		//bottom
-		if (utils::IsOverlapping(Rectf{ m_Segments[0].left + 1, m_Segments[0].bottom - m_SegmentSize + 1, m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
+		if (utils::IsOverlapping(Rectf{ m_Segments[0].left + 1, m_Segments[0].bottom - (m_SegmentSize + 1), m_Segments[0].width - 2, m_Segments[0].height - 2 }, m_Segments[i]))
 		{
-			inputVec[3] = -1;
+			inputVec[3] = 0;
 			continue;
 		}
 	}
@@ -258,19 +269,19 @@ std::vector<float> Snake::GetInput(const Rectf& food)
 	if (m_MovingDirection == MovingDirection::left)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(-1);
+		inputVec.push_back(0);
 	if (m_MovingDirection == MovingDirection::right)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(-1);
+		inputVec.push_back(0);
 	if (m_MovingDirection == MovingDirection::up)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(-1);
+		inputVec.push_back(0);
 	if (m_MovingDirection == MovingDirection::down)
 		inputVec.push_back(1);
 	else
-		inputVec.push_back(-1);
+		inputVec.push_back(0);
 
 	
 

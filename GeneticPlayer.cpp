@@ -40,7 +40,6 @@ std::vector<std::vector<std::vector<float>>> GeneticPlayer::GenerateBrain(int in
 			hiddenLayer1[i].push_back(((rand() % 201) - 100) / 100.f);
 		}
 	}
-	
 
 	std::vector<std::vector<float>> hiddenLayer2;
 	for (int i{}; i < hiddenSize; ++i)
@@ -51,7 +50,7 @@ std::vector<std::vector<std::vector<float>>> GeneticPlayer::GenerateBrain(int in
 			hiddenLayer2[i].push_back(((rand() % 201) - 100) / 100.f);
 		}
 	}
-	
+
 	std::vector<std::vector<float>> outputLayer;
 	for (int i{}; i < outputSize; ++i)
 	{
@@ -61,19 +60,6 @@ std::vector<std::vector<std::vector<float>>> GeneticPlayer::GenerateBrain(int in
 			outputLayer[i].push_back(((rand() % 201) - 100) / 100.f);
 		}
 	}
-
-
-	/*for (std::vector<float> value : hiddenLayer1)
-	{
-		for (float value1 : value)
-		{
-			cout << value1 << ", ";
-		}
-		cout << endl;
-	}
-	cout << endl;*/
-
-
 
 	return std::vector<std::vector<std::vector<float>>>{hiddenLayer1, hiddenLayer2, outputLayer};
 }
@@ -104,22 +90,14 @@ int GeneticPlayer::GetMove(const std::vector<float>& inputVector)
 	{
 		value = std::tanh(value);
 	}
-	
+
 	std::vector<float> hiddenResult2{ Dot(hiddenLayer2, hiddenResult1) };
 	for (float& value : hiddenResult2)
 	{
 		value = std::tanh(value);
 	}
-	
+
 	std::vector<float> outputResult{ Dot(outputLayer, hiddenResult2) };
-
-
-	/*for (float value1 : outputResult)
-	{
-		cout << value1 << ", ";
-	}
-	cout << endl;*/
-
 	//0 left
 	//1 right
 	//2 up
@@ -136,17 +114,7 @@ int GeneticPlayer::GetMove(const std::vector<float>& inputVector)
 std::vector<std::vector<std::vector<std::vector<float>>>> GeneticPlayer::Reproduce(const std::vector<std::vector<std::vector<std::vector<float>>>>& top10Brains)
 {
 	std::vector<std::vector<std::vector<std::vector<float>>>> newPopulation{};
-	/*for (const std::vector<std::vector<std::vector<float>>>& brain : top2Brains)
-	{
-		newPopulation.push_back(brain);
-		std::vector<std::vector<std::vector<float>>> newBrain{ Mutate(brain) };
-		newPopulation.push_back(newBrain);
-	}
-	for (int i{}; i < m_PopulationSize / 2; ++i)
-	{
-		newPopulation.push_back(GenerateBrain(static_cast<int>(m_InputSize), static_cast<int>(m_HiddenSize), 4));
-	}*/
-	
+
 	for (size_t i{}; i < top10Brains.size(); ++i)
 	{
 		newPopulation.push_back(top10Brains[i]);
@@ -156,6 +124,7 @@ std::vector<std::vector<std::vector<std::vector<float>>>> GeneticPlayer::Reprodu
 		int randomNumber1 = rand() % int(newPopulation.size());
 		int randomNumber2 = rand() % int(newPopulation.size());
 		newPopulation.push_back(CrossOver(newPopulation[randomNumber1], newPopulation[randomNumber2]));
+		//	filling half the population with random brains to keep it from repeating mistakes
 		//newPopulation.push_back(GenerateBrain(static_cast<int>(m_InputSize), static_cast<int>(m_HiddenSize), 4));
 	}
 	for (std::vector<std::vector<std::vector<float>>>& brain : newPopulation)
@@ -214,25 +183,19 @@ void GeneticPlayer::NextGeneration(const std::vector<float>& fitnesses)
 	std::vector<float> sortedCopy{ fitnesses };
 	std::sort(sortedCopy.begin(), sortedCopy.end(), std::greater<float>());
 
-
-
-	//cout << "fitness list: [";
-	//for (float value : fitnesses)
-	//{
-	//	cout << value << ", ";
-	//}
-	//cout << "]" << endl;
-	//cout << "sorted copy of fitness list: [";
-	//for (float value : sortedCopy)
-	//{
-	//	cout << value << ", ";
-	//}
-	//cout << "]" << endl;
-
-
-
-	std::vector<std::vector<std::vector<std::vector<float>>>> top10{};
-	auto itr = std::find(fitnesses.begin(), fitnesses.end(), sortedCopy[0]);
+	//std::vector<std::vector<std::vector<std::vector<float>>>> top10{};
+	std::vector<std::vector<std::vector<std::vector<float>>>> top25Percent{};
+	//for (int i{}; i < fitnesses.size(); ++i)
+	for (int i{}; i < int(fitnesses.size())/4; ++i)
+	{
+		auto itr = std::find(fitnesses.begin(), fitnesses.end(), sortedCopy[i]);
+		if (itr != fitnesses.cend())
+		{
+			//top10.push_back(m_Population[std::distance(fitnesses.begin(), itr)]);
+			top25Percent.push_back(m_Population[std::distance(fitnesses.begin(), itr)]);
+		}
+	}
+	/*auto itr = std::find(fitnesses.begin(), fitnesses.end(), sortedCopy[0]);
 	if (itr != fitnesses.cend())
 	{
 		top10.push_back(m_Population[std::distance(fitnesses.begin(), itr)]);
@@ -281,8 +244,9 @@ void GeneticPlayer::NextGeneration(const std::vector<float>& fitnesses)
 	if (itr10 != fitnesses.cend())
 	{
 		top10.push_back(m_Population[std::distance(fitnesses.begin(), itr10)]);
-	}
+	}*/
 
-	m_Population = Reproduce(top10);
+	//m_Population = Reproduce(top10);
+	m_Population = Reproduce(top25Percent);
 	m_CurrentIndividual = 0;
 }

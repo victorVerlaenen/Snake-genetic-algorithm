@@ -40,6 +40,7 @@ private:
 	static bool m_NextInd;
 	std::vector<float> m_Fitnessess;
 	static bool m_Pause;
+	int m_TempLife{1};
 
 	// FUNCTIONS
 	void Initialize( );

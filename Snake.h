@@ -34,15 +34,16 @@ public:
 	void ResetSnake();
 	float GetFitness() const;
 	void IncreaseAvgSteps();
-	void IncreaseSpeed() { m_MovingSpeed *= 2; }
-	void DecreaseSpeed() { m_MovingSpeed *= 2; }
+	void IncreaseSpeed() { if(m_MovingSpeed >= (0.2f/pow(2,5))) m_MovingSpeed /= 2; }
+	void DecreaseSpeed() { if (m_MovingSpeed <= (0.2f * pow(2, 5))) m_MovingSpeed *= 2; }
 	void IncreaseFoodEaten() { m_FoodEaten++; }
+	int GetLife() { return m_CurrentLife; }
 private:
 	bool CheckIfHitsBorder();
 	bool CheckIfHitsSelf();
 	bool CheckIfEatenNothing();
 	int m_Size{ 3 };
-	float m_TimePassed{ 0 };
+	float m_TimePassed{ 0.f };
 	Point2f m_MovingVelocity;
 	MovingDirection m_MovingDirection;
 	const float m_SegmentSize;
@@ -51,7 +52,7 @@ private:
 	bool m_SnakeAdvanced{ false };
 	const Rectf m_WorldBounds;
 	int m_CurrentLife{ 1 };
-	int m_MaxSteps{ 1000 };
+	int m_MaxSteps{ 201 };
 	int m_AmountOfSteps{ 0 };
 	int m_AmountOfStepsForPenalty{ 0 };
 	int m_LastCheckedScore{ 0 };
