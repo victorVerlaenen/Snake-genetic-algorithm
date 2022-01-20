@@ -31,7 +31,7 @@ public:
 	bool GetAdvanced() const { return m_SnakeAdvanced; }
 	void SetAdvanced(bool advanced) { m_SnakeAdvanced = advanced; }
 	std::vector<Rectf> GetSegments(){ return m_Segments; }
-	void ResetSnake();
+	void ResetSnake(Food* food);
 	float GetFitness() const;
 	void IncreaseAvgSteps();
 	void IncreaseSpeed() { if(m_MovingSpeed >= (0.2f/pow(2,5))) m_MovingSpeed /= 2; }

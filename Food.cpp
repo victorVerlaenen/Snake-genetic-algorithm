@@ -39,6 +39,7 @@ void Food::GiveRandomPosition(const std::vector<Rectf>& snakeSegments)
 		if (utils::IsOverlapping(m_Food, segment))
 		{
 			GiveRandomPosition(snakeSegments);
+			return;
 		}
 	}
 }

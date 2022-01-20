@@ -52,7 +52,7 @@ void Game::Initialize()
 	m_pWorld = std::make_unique<World>(Rectf{ 50.f, 50.f, 400.f, 400.f }, 16);//gives a border of 50 for the window
 	m_pSnake = std::make_unique<Snake>(m_pWorld->GetWorldBounds(), m_pWorld->GetWorldBounds().width / m_pWorld->GetNrOfColsAndRows());
 	m_pFood = std::make_unique<Food>(m_pWorld->GetWorldBounds(), m_pWorld->GetNrOfColsAndRows(), m_pSnake->GetSegments());
-	m_pPlayer = std::make_unique<GeneticPlayer>(100, 100, 1, 9.f, 15, 10.f);
+	m_pPlayer = std::make_unique<GeneticPlayer>(100, 100, 1, 7.f, 15);
 	cout << "generation: " << m_Generation << ", individual: " << m_Individual << endl;
 
 	

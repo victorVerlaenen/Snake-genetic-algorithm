@@ -9,7 +9,7 @@ public:
 	//hiddenSize is the size of the brain
 	//mutationChance is the probability that a mutation is introduced when spawning a new generation
 	//mutationSize is the magnitude that those mutations occur
-	GeneticPlayer(int populationSize, int numOfGenerations, int numOfTrials, float inputSize, int hiddenSize, float boardSize, float mutationChance = 0.1f, float mutationSize = 0.1f);
+	GeneticPlayer(int populationSize, int numOfGenerations, int numOfTrials, float inputSize, int hiddenSize, float mutationChance = 0.1f, float mutationSize = 0.1f);
 	void SetIndividual(int individual);
 	void NextGeneration(const std::vector<float>& fitnesses);
 	int GetMove(const std::vector<float>& inputVector);
@@ -28,7 +28,6 @@ private:
 	const int m_NumOfTrials;
 	const float m_InputSize;
 	const int m_HiddenSize;
-	const float m_BoardSize;
 	const float m_MutationChance;
 	const float m_MutationSize;
 	int m_CurrentIndividual{ 0 };
