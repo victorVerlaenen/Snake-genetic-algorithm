@@ -7,14 +7,15 @@ The aim of this project is to learn an ai to play snake using genetic algorithms
   I will be working in a given framework to make the drawing easier.
 
 # Network structure:
-  8 inputs: 
+  7 inputs: 
   
-    Is there danger to the left of the head?	(0 no -1 yes)
-    Is there danger to the right of the head?	(0 no -1 yes)
-    Is there danger to the top of the head?	(0 no -1 yes)
-    Is there danger to the bottom of the head?	(0 no -1 yes)
-    Is there food to the left of the head? 		(0 no 1 yes)
-    A value of sinus of the angle on which the food is inclined relative to the snake (between -1 and 1)
+    Is there danger to the left of the head?	          (0 no 1 yes)
+    Is there danger to the right of the head?	          (0 no 1 yes)
+    Is there danger to the top of the head?     	      (0 no 1 yes)
+    Is there danger to the bottom of the head?	        (0 no 1 yes)
+    The sin of the angle between the food and the head. 		
+    The cos of the angle between the food and the head.
+    BIAS value                                          (1)
   4 outputs:
   
     Turn left.
@@ -22,7 +23,7 @@ The aim of this project is to learn an ai to play snake using genetic algorithms
     Turn upwards.
     Turn downwards.
 
-Population size is 50 because of the time it takes to test a bigger population.
+Population size is 100 because of the time it takes to test a bigger population.
 At first initialize weights with a value between -1 and 1.
 
 # Fitness function:
@@ -30,11 +31,13 @@ At first initialize weights with a value between -1 and 1.
   record is the highest score achieved by the individual.
 
 # Selection:
-  I chose to run each snake for a fixed 5000 steps, more would result in a more accurate fitness function but it would take more time.
-  Choose the 10 best individuals according to the fitness function to create the next generation.
+  I chose to run each snake for a fixed 201 steps, more would result in a more accurate fitness function but it would take more time.
+  Choose the 50% best individuals according to the fitness function to create the next generation.
 
 # Crossover:
   Randomly select 2 snakes from the top 10 to crossover till the population size of 50 is achieved again.
   Take a random number between 0 and 1. If the number is smaller than 0.5 we take the weight of the father and otherwise we take the weight of the mother.
 
-THIS IS ALL UNDER PROGRESS SO CHANGES ARE GOING TO HAPPEN
+
+The snake seems to improve for a while but then just stops.
+(Sadly the program is not working entirely correct)
