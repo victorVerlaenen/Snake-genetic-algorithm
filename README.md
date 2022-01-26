@@ -1,4 +1,6 @@
 # Snake Genetic Algorithm
+![image](https://user-images.githubusercontent.com/97389540/151232337-52d4a6e2-dea2-4610-94b9-79b348909c7b.png)
+
 Research into genetic algorithms for machine learning
 
 The aim of this project is to learn an ai to play snake using genetic algorithms.
@@ -25,6 +27,12 @@ The aim of this project is to learn an ai to play snake using genetic algorithms
 
 Population size is 100 because of the time it takes to test a bigger population.
 At first initialize weights with a value between -1 and 1.
+
+# The network
+  My layers are basicly just matrices. The size of my hidden layers is 15. 
+  To get the output just do the dotproduct between the inputvec and the hidden layers.
+  Do the same with that result til you get an output of size 4.
+  The highest value is chosen as the output direction.
 
 # Fitness function:
   F = record * 5000 - deaths * 150 - avg_steps * 100 - penalties * 1000
